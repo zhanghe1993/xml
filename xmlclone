@@ -1,0 +1,21 @@
+from xml.dom import minidom
+import sys
+import requests
+
+domTree = minidom.parse(r'D:\12.xml')
+rootNode = domTree.documentElement
+a = rootNode.getElementsByTagName("UsagePoint")[0]
+b = rootNode.getElementsByTagName("UsagePointConfig")[0]
+c = a.cloneNode(True)
+UsagePoint_delete = rootNode.getElementsByTagName("UsagePoint")
+for UsagePoint_del in UsagePoint_delete:
+	UsagePoint_del.parentNode.removeChild(UsagePoint_del)
+for i in range(10):
+	d = c.cloneNode(True)
+	if len(str(i)) <= 11:
+		Point_No = '0'*(10-len(str(i))) + str(i)
+	else:
+		print('测量点号需要低于10位')
+		sys.exit()
+	d.getElementsByTagName('mRID')[0].childNodes[0].data = Point_No
+	b.appendChild(d)
