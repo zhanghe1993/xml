@@ -2,7 +2,7 @@ from xml.dom import minidom
 import sys
 import requests
 
-domTree = minidom.parse(r'D:\12.xml')
+domTree = minidom.parse(r'D:\123.xml')
 rootNode = domTree.documentElement
 a = rootNode.getElementsByTagName("UsagePoint")[0]
 b = rootNode.getElementsByTagName("UsagePointConfig")[0]
