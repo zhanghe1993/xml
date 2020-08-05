@@ -1,0 +1,66 @@
+from xml.dom import minidom
+import requests
+import sys
+
+
+XmlString = '''
+<soap:Envelope>
+  <soap:Body>
+    <Request >
+      <RequestMessage>
+        <Header>
+          <Verb>create</Verb>
+        </Header>
+        <Payload>
+          <UsagePointConfig>
+            <UsagePoint>
+              <mRID>9999999991</mRID>
+              <Names>
+                <NameType>
+                  <description>this is the description</description>
+                </NameType>
+              </Names>
+              <UsagePointLocation>
+                <PositionPoints>
+                  <xPosition>1.325684</xPosition>
+                  <yPosition>2.356472</yPosition>
+                </PositionPoints>
+                <mainAddress>
+                  <streetDetail>
+                    <addressGeneral> chengdu china </addressGeneral>
+                  </streetDetail>
+                </mainAddress>
+              </UsagePointLocation>
+              <Equipments>
+                <Names>
+                  <name>60</name>
+                </Names>
+              </Equipments>
+            </UsagePoint>
+          </UsagePointConfig>
+        </Payload>
+      </RequestMessage>
+    </Request>
+  </soap:Body>
+</soap:Envelope>
+'''
+
+domTree = minidom.parseString(XmlString)
+rootNode = domTree.documentElement
+a = rootNode.getElementsByTagName("UsagePoint")[0]
+b = rootNode.getElementsByTagName("UsagePointConfig")[0]
+c = a.cloneNode(True)
+UsagePoint_delete = rootNode.getElementsByTagName("UsagePoint")
+
+for UsagePoint_del in UsagePoint_delete:
+	UsagePoint_del.parentNode.removeChild(UsagePoint_del)
+for i in range(10):
+	d = c.cloneNode(True)
+	if len(str(i)) <= 11:
+		Point_No = '0' * (10 - len(str(i))) + str(i)
+	else:
+		print('The mRID should be less than 10 digits')
+		sys.exit()
+	d.getElementsByTagName('mRID')[0].childNodes[0].data = Point_No
+	b.appendChild(d)
+print(domTree.toxml())
